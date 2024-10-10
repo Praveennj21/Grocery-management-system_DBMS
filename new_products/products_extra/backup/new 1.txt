@@ -1,0 +1,12 @@
+ create table products (
+	 id int(100) AUTO_INCREMENT PRIMARY KEY,
+     name varchar(100),
+    price int(100),
+        quantity int(100),
+     image_path varchar(200));
+	 
+	 create table bill
+	 ( id int(100),
+	 name varchar(100),
+	 quantity varchar(100),
+	 amount int(100));

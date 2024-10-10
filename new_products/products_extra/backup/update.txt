@@ -1,0 +1,41 @@
+<?php
+include('db.php');
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $id = $_POST["id"];
+    $price = $_POST["price"];
+    $quantity = $_POST["quantity"];
+
+    // Check if the product with the given ID exists
+    $checkProductSql = "SELECT id, quantity FROM products WHERE id = $id";
+    $checkProductResult = $conn->query($checkProductSql);
+
+    if ($checkProductResult->num_rows > 0) {
+        // Product exists, update the quantity
+        $existingProduct = $checkProductResult->fetch_assoc();
+        $existingQuantity = $existingProduct['quantity'];
+
+        // Calculate the new quantity by adding the existing quantity and the extra quantity
+        $newQuantity = $existingQuantity + $quantity;
+
+        // Update the price and quantity in the 'products' table
+        $updateSql = "UPDATE products SET price = $price, quantity = $newQuantity WHERE id = $id";
+        $result = $conn->query($updateSql);
+
+        // Display update result message
+        if ($result === TRUE) {
+            echo "Product updated successfully!";
+        } else {
+            echo "Error updating price and quantity: " . $conn->error;
+        }
+    } else {
+        // Product with the given ID does not exist
+        echo 'Product with ID ' . $id . ' does not exist.';
+    }
+
+    // Close the database connection
+    $conn->close();
+} else {
+    echo "Invalid request method.";
+}
+?>
